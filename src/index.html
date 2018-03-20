@@ -5,10 +5,12 @@
     <meta charset="UTF-8">
     <title>简历编辑器</title>
     <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" href="./css/resume.css">
+    <link rel="stylesheet" href="./css/editable-span.css">
 </head>
 
 <body>
-    <div class="page">
+    <div class="page" id="app">
         <aside>
             <div class="upper">
                 <ul class="actions">
@@ -32,9 +34,20 @@
         </aside>
         <main>
             <div class="resume">
-                <section>
-                    <h1>姓名</h1>
-                    <p class="profile">出生年月|应聘岗位|性别|邮箱|手机</p>
+                <section class="profile">
+                    <h1>
+                        <editable-span :value="resume.name" v-on:edit="onEdit('name',$event)"></editable-span>
+                    </h1>
+                    <p>应聘职位： <editable-span :value="resume.jobTitle" v-on:edit="onEdit('jobTitle',$event)"></editable-span></p>
+                    <p>
+                        <editable-span :value="resume.birthDay" v-on:edit="onEdit('birthDay',$event)"></editable-span>
+                        |
+                       <editable-span :value="resume.gender" v-on:edit="onEdit('gender',$event)"></editable-span>
+                        |
+                        <editable-span :value="resume.email" v-on:edit="onEdit('email',$event)"></editable-span>
+                        |
+                        <editable-span :value="resume.phone" v-on:edit="onEdit('phone',$event)"></editable-span>
+                    </p>
                 </section>
                 <section class="skills">
                     <h1>技能</h1>
@@ -122,8 +135,10 @@
             </div>
         </main>
     </div>
-    <script src="../node_modules/leancloud-storage/dist/av-min.js"></script>
+    <script src="../vendors/av-min.js"></script>
     <script src="./js/av.js"></script>
+    <script src="../vendors/vue.min.js"></script>
+    <script src="./js/editable-span.js"></script>
+    <script src="./js/app.js"></script>
 </body>
-
 </html>
