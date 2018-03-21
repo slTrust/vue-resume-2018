@@ -2,6 +2,7 @@ new Vue({
     el:'#app',
     data:{
         loginVisible:false,
+        signUpVisible:false,
         editingName:false,
         resume:{
             name:'xxx',
@@ -37,9 +38,6 @@ new Vue({
             //     console.error(error);
             // });
 
-        },
-        showLogin(){
-            this.loginVisible = true;
         },
         saveResume(){
 
