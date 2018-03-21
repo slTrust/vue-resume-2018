@@ -1,6 +1,7 @@
 new Vue({
     el:'#app',
     data:{
+        loginVisible:false,
         editingName:false,
         resume:{
             name:'xxx',
@@ -14,6 +15,34 @@ new Vue({
     methods:{
         onEdit(key,value){
             this.resume[key] = value;
+        },
+        onClickSave(){
+            console.log(this.resume)
+            let currentUser = AV.User.current();
+            console.log(currentUser)
+            if(!currentUser){
+                this.showLogin()
+            }else{
+                this.saveResume()
+            }
+            // // 声明类型
+            // var User = AV.Object.extend('User');
+            // // 新建对象
+            // var user = new User();
+            // // 设置名称
+            // user.set('resume',this.resume);
+            // user.save().then(function (todo) {
+            //     console.log('objectId is ' + todo.id);
+            // }, function (error) {
+            //     console.error(error);
+            // });
+
+        },
+        showLogin(){
+            this.loginVisible = true;
+        },
+        saveResume(){
+
         }
     }
 })

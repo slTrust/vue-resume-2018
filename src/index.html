@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="./css/index.css">
     <link rel="stylesheet" href="./css/resume.css">
     <link rel="stylesheet" href="./css/editable-span.css">
+    <link rel="stylesheet" href="./css/login.css">
 </head>
 
 <body>
@@ -15,7 +16,7 @@
             <div class="upper">
                 <ul class="actions">
                     <li>
-                        <button class="button">保存</button>
+                        <button class="button" @click="onClickSave">保存</button>
                     </li>
                     <li>
                         <button class="button">分享</button>
@@ -129,11 +130,11 @@
                                 这个项目的我是怎么做这个项目的我是怎么做这个项目的 这个项目的我是怎么做这个项目的我是怎么做这个项目的
                             </p>
                         </li>
-
                     </ol>
                 </section>
             </div>
         </main>
+        <div v-show="loginVisible" class="login">登录</div>
     </div>
     <script src="../vendors/av-min.js"></script>
     <script src="./js/av.js"></script>
