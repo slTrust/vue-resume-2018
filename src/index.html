@@ -138,37 +138,37 @@
             </div>
         </main>
         <div v-show="loginVisible" class="login">
-            <form action="" class="form">
+            <form action="" class="form" @submit.prevent="onLogin">
                 <h2>登录</h2>
-                <button @click="loginVisible = false;">关闭</button>
+                <button @click.prevent="loginVisible = false;">关闭</button>
                 <div class="row">
                     <label for="">邮箱</label>
-                    <input type="text">
+                    <input type="text" v-model="login.email">
                 </div>
                 <div class="row">
                     <label for="">密码</label>
-                    <input type="text">
+                    <input type="text" v-model="login.password">
                 </div>
                 <div class="actions">
-                    <button>提交</button>
+                    <button type="submit">提交</button>
                     <a href="#" @click="signUpVisible = true;loginVisible = false;">注册</a>
                 </div>
             </form>
         </div>
         <div v-show="signUpVisible" class="singUp">
-            <form action="" class="form">
+            <form action="" class="form" @submit.prevent="onSingUp">
                 <h2>注册</h2>
-                <button @click="signUpVisible = false;">关闭</button>
+                <button @click.prevent="signUpVisible = false;">关闭</button>
                 <div class="row">
                     <label for="">邮箱</label>
-                    <input type="text">
+                    <input type="text" v-model="singUp.email">
                 </div>
                 <div class="row">
                     <label for="">密码</label>
-                    <input type="text">
+                    <input type="text" v-model="singUp.password">
                 </div>
                 <div class="actions">
-                    <button>提交</button>
+                    <button type="submit">提交</button>
                     <a href="#" @click="signUpVisible = false;loginVisible = true;">登录</a>
                 </div>
             </form>

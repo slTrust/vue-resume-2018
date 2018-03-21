@@ -11,6 +11,14 @@ new Vue({
             jobTitle:'前端工程师',
             phone:13611111111,
             email:'example@example.com'
+        },
+        login:{
+            email:'',
+            password:''
+        },
+        singUp:{
+            email:'',
+            password:''
         }
     },
     methods:{
@@ -18,9 +26,9 @@ new Vue({
             this.resume[key] = value;
         },
         onClickSave(){
-            console.log(this.resume)
             let currentUser = AV.User.current();
             console.log(currentUser)
+            return
             if(!currentUser){
                 this.showLogin()
             }else{
@@ -41,6 +49,36 @@ new Vue({
         },
         saveResume(){
 
+        },
+        onSingUp(e){
+            // e.preventDefault(); //阻止表单默认的提交刷新页面事件  可以直接在@submit.prevent
+            // 新建 AVUser 对象实例
+            const user = new AV.User();
+            // 设置用户名
+            user.setUsername(this.singUp.email);
+            // 设置密码
+            user.setPassword(this.singUp.password);
+            // 设置邮箱
+            user.setEmail(this.singUp.email);
+            user.signUp().then(function (user) {
+                console.log('注册succ')
+                console.log(user);
+                console.log('注册')
+            }, function (error) {
+            });
+        },
+        onLogin(e){
+            AV.User.logIn(this.login.email, this.login.password)
+                .then(function (user) {
+                    console.log(user);
+                }, (function (error) {
+                    if(error.code===211){
+                        alert('用户不存在')
+                    }else if(error.code===210){
+                        alert('用户名或密码错误')
+                    }
+                })
+            );
         }
     }
 })
