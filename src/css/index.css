@@ -22,7 +22,7 @@ ol {
 body {
     font-size: 18px;
 }
-
+div[v-cloak]{display:none;}
 button {
     font-size: inherit;
 }
