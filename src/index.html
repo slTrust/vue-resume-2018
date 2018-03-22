@@ -17,7 +17,7 @@
             <div class="upper">
                 <ul class="actions">
                     <li>
-                        <button class="button" @click="loginVisible = true;">保存</button>
+                        <button class="button" @click="onClickSave">保存</button>
                     </li>
                     <li>
                         <button class="button">分享</button>
@@ -31,7 +31,7 @@
                 </ul>
             </div>
             <div class="down">
-                <button class="button">登出</button>
+                <button class="button" @click="onLogout">登出</button>
             </div>
         </aside>
         <main>
@@ -140,7 +140,7 @@
         <div v-show="loginVisible" class="login">
             <form action="" class="form" @submit.prevent="onLogin">
                 <h2>登录</h2>
-                <button @click.prevent="loginVisible = false;">关闭</button>
+                <button type="button" @click="loginVisible = false;">关闭</button>
                 <div class="row">
                     <label for="">邮箱</label>
                     <input type="text" v-model="login.email">
@@ -158,7 +158,7 @@
         <div v-show="signUpVisible" class="singUp">
             <form action="" class="form" @submit.prevent="onSingUp">
                 <h2>注册</h2>
-                <button @click.prevent="signUpVisible = false;">关闭</button>
+                <button type="button" @click="signUpVisible = false;">关闭</button>
                 <div class="row">
                     <label for="">邮箱</label>
                     <input type="text" v-model="singUp.email">

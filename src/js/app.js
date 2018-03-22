@@ -28,27 +28,21 @@ new Vue({
         onClickSave(){
             let currentUser = AV.User.current();
             console.log(currentUser)
-            return
             if(!currentUser){
-                this.showLogin()
+                // 当前没登录就显示登录窗口
+                this.loginVisible = true;
             }else{
                 this.saveResume()
             }
-            // // 声明类型
-            // var User = AV.Object.extend('User');
-            // // 新建对象
-            // var user = new User();
-            // // 设置名称
-            // user.set('resume',this.resume);
-            // user.save().then(function (todo) {
-            //     console.log('objectId is ' + todo.id);
-            // }, function (error) {
-            //     console.error(error);
-            // });
-
         },
         saveResume(){
-
+            // 第一个参数是 className，第二个参数是 objectId
+            let {id} = AV.User.current()
+            var user = AV.Object.createWithoutData('User', id);
+            // 修改属性
+            user.set('resume',this.resume);
+            // 保存到云端
+            user.save();
         },
         onSingUp(e){
             // e.preventDefault(); //阻止表单默认的提交刷新页面事件  可以直接在@submit.prevent
@@ -79,6 +73,13 @@ new Vue({
                     }
                 })
             );
+        },
+        onLogout(){
+            AV.User.logOut();
+            // 现在的 currentUser 是 null 了
+            var currentUser = AV.User.current();
+            alert('注销成功')
+            window.location.reload();
         }
     }
 })
