@@ -37,6 +37,7 @@
         <main>
             <div class="resume">
                 <section class="profile">
+                    {{currentUser}}
                     <h1>
                         <editable-span :value="resume.name" v-on:edit="onEdit('name',$event)"></editable-span>
                     </h1>

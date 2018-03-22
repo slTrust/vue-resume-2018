@@ -1,9 +1,13 @@
-new Vue({
+let app = new Vue({
     el:'#app',
     data:{
         loginVisible:false,
         signUpVisible:false,
         editingName:false,
+        currentUser:{
+            id:'',
+            email:''
+        },
         resume:{
             name:'xxx',
             gender:'女',
@@ -63,9 +67,13 @@ new Vue({
         },
         onLogin(e){
             AV.User.logIn(this.login.email, this.login.password)
-                .then(function (user) {
+                .then((user)=>{
                     console.log(user);
-                }, (function (error) {
+                    this.currentUser = {
+                        id:user.id,
+                        email:user.email
+                    }
+                }, ( (error)=>{
                     if(error.code===211){
                         alert('用户不存在')
                     }else if(error.code===210){
@@ -83,3 +91,9 @@ new Vue({
         }
     }
 })
+
+let currentUser = AV.User.current();
+
+if(currentUser){
+    app.currentUser = currentUser
+}
