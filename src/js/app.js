@@ -71,7 +71,7 @@ let app = new Vue({
                     console.log(user);
                     this.currentUser = {
                         id:user.id,
-                        email:user.email
+                        email:user.attributes.email
                     }
                 }, ( (error)=>{
                     if(error.code===211){
