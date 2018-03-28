@@ -5,7 +5,7 @@ let app = new Vue({
         signUpVisible:false,
         editingName:false,
         currentUser:{
-            id:'',
+            objectId:'',
             email:''
         },
         resume:{
@@ -41,12 +41,16 @@ let app = new Vue({
         },
         saveResume(){
             // 第一个参数是 className，第二个参数是 objectId
-            let {id} = AV.User.current()
-            var user = AV.Object.createWithoutData('User', id);
+            let {objectId} = AV.User.current().toJSON();
+            var user = AV.Object.createWithoutData('User', objectId);
             // 修改属性
             user.set('resume',this.resume);
             // 保存到云端
-            user.save();
+            user.save().then(()=>{
+                alert('保存成功')
+            },()=>{
+                alert('保存失败')
+            });
         },
         onSingUp(e){
             // e.preventDefault(); //阻止表单默认的提交刷新页面事件  可以直接在@submit.prevent
@@ -58,21 +62,30 @@ let app = new Vue({
             user.setPassword(this.singUp.password);
             // 设置邮箱
             user.setEmail(this.singUp.email);
-            user.signUp().then(function (user) {
-                console.log('注册succ')
+            user.signUp().then((user)=>{
                 console.log(user);
-                console.log('注册')
-            }, function (error) {
+                alert('注册成功,请登录')
+                //帮用户登录
+                debugger
+                user = user.toJSON();
+                console.log(user)
+                this.currentUser.objectId = user.objectId;
+                this.currentUser.email = user.email;
+                this.signUpVisible = false;
+            }, (error)=>{
+                alert(error.rawMessage)
+                for(var name in error){
+                    console.log(name)
+                }
             });
         },
         onLogin(e){
             AV.User.logIn(this.login.email, this.login.password)
                 .then((user)=>{
-                    console.log(user);
-                    this.currentUser = {
-                        id:user.id,
-                        email:user.attributes.email
-                    }
+                    user = user.toJSON();
+                    this.currentUser.objectId = user.objectId;
+                    this.currentUser.email = user.email;
+                    this.loginVisible = false;
                 }, ( (error)=>{
                     if(error.code===211){
                         alert('用户不存在')
@@ -82,12 +95,26 @@ let app = new Vue({
                 })
             );
         },
+        hasLogin(){
+            // 存在则已登录  不存在则没登录
+            return !!this.currentUser.objectId
+        },
         onLogout(){
             AV.User.logOut();
             // 现在的 currentUser 是 null 了
             var currentUser = AV.User.current();
             alert('注销成功')
             window.location.reload();
+        },
+        getResume(){
+            var query = new AV.Query('User');
+            query.get(this.currentUser.objectId).then((user)=>{
+                console.log(user)
+                let resume = user.toJSON().resume;
+                this.resume = resume;
+            },()=>{
+                console.log('获取用户信息失败')
+            })
         }
     }
 })
@@ -95,5 +122,6 @@ let app = new Vue({
 let currentUser = AV.User.current();
 
 if(currentUser){
-    app.currentUser = currentUser
+    app.currentUser = currentUser.toJSON();
+    app.getResume()
 }
