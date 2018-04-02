@@ -14,7 +14,13 @@ let app = new Vue({
             birthDay:'1990-01-01',
             jobTitle:'前端工程师',
             phone:13611111111,
-            email:'example@example.com'
+            email:'example@example.com',
+            skills:[
+                {name:'请填写技能名称',description:'请填写技能描述'},
+                {name:'请填写技能名称',description:'请填写技能描述'},
+                {name:'请填写技能名称',description:'请填写技能描述'},
+                {name:'请填写技能名称',description:'请填写技能描述'}
+            ]
         },
         login:{
             email:'',
@@ -27,7 +33,36 @@ let app = new Vue({
     },
     methods:{
         onEdit(key,value){
-            this.resume[key] = value;
+            //正则替换   skills[0].name[0].aa  ==> skills.0.name.0.aa
+            let regex = /\[(\d+)\]/g;
+            key = key.replace(regex,(match,number)=>`.${number}`)
+            let keys = key.split('.');
+            let result = this.resume;
+            for(var i=0;i<keys.length;i++){
+                //this.resume.['skills']['0']['name'] 因为最后一项name时 已经不是引用了 所以在它前一项保存
+                if(i === keys.length-1){
+                    result[keys[i]] = value
+                }else{
+                    result = result[keys[i]]
+                }
+                //result = result[keys[i]]
+                //理解
+                /*
+                result = this.resume
+                keys = ['skills','0','name'];
+                i=0  result === result[keys[0]] === this.resume.skills
+                i=1  result === result[keys[1]] === this.resume.skills.0
+                i=2  result === result[keys[2]] === this.resume.skills.0.name
+                retult === this.resume.['skills']['0']['name']
+                */
+            }
+            console.log(result)
+        },
+        addSkill(){
+            this.resume.skills.push({name:'请填写技能名称',description:'请填写技能描述'})
+        },
+        removeSkill(index){
+            this.resume.skills.splice(index,1)
         },
         onClickSave(){
             let currentUser = AV.User.current();
@@ -109,9 +144,11 @@ let app = new Vue({
         getResume(){
             var query = new AV.Query('User');
             query.get(this.currentUser.objectId).then((user)=>{
-                console.log(user)
                 let resume = user.toJSON().resume;
-                this.resume = resume;
+                //这样会把原来的已有的属性干掉
+                //this.resume = resume;
+                Object.assign(this.resume,resume);
+
             },()=>{
                 console.log('获取用户信息失败')
             })
