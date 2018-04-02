@@ -9,6 +9,10 @@ let app = new Vue({
             objectId:'',
             email:''
         },
+        prevviewUser:{
+            objectId:undefined
+        },
+        previewResume:{},
         resume:{
             name:'xxx',
             gender:'女',
@@ -35,7 +39,22 @@ let app = new Vue({
             email:'',
             password:''
         },
-        shareLink:'不知道'
+        shareLink:'不知道',
+        mode:'edit'  // preview
+    },
+    watch:{
+        //监听登录成功后的 objectId
+        'currentUser.objectId':function(newValue,oldValue){
+            if(newValue){
+                console.log('登录重新获取用户数据')
+                this.getResume(this.currentUser);
+            }
+        }
+    },
+    computed:{
+        displayResume:function(){
+            return this.mode==='edit'?this.resume:this.previewResume;
+        }
     },
     methods:{
         onEdit(key,value){
@@ -153,14 +172,12 @@ let app = new Vue({
             alert('注销成功')
             window.location.reload();
         },
-        getResume(){
+        getResume(user){
             var query = new AV.Query('User');
-            query.get(this.currentUser.objectId).then((user)=>{
+            return query.get(user.objectId).then((user)=>{
                 let resume = user.toJSON().resume;
-                //这样会把原来的已有的属性干掉
-                //this.resume = resume;
-                Object.assign(this.resume,resume);
-
+                //不进行任何赋值  返回对象数据
+                return resume;
             },()=>{
                 console.log('获取用户信息失败')
             })
@@ -168,10 +185,30 @@ let app = new Vue({
     }
 })
 
+//获取当前用户
 let currentUser = AV.User.current();
 
 if(currentUser){
     app.currentUser = currentUser.toJSON();
     app.shareLink = location.origin + location.pathname + '?user_id=' + app.currentUser.objectId;
-    app.getResume()
+    console.log('currentUserId'+app.currentUser.objectId)
+    app.getResume(app.currentUser).then(resume=>{
+        app.resume = resume
+    })
+}
+// 获取预览用户id
+let search = location.search;
+let regex = /user_id=([^&]+)/
+let matches = search.match(regex);
+let userId;
+if(matches){
+    userId = matches[1];
+    // 如果当前url里有用户id 则切换为预览模式
+    app.mode = 'preview';
+    console.log('previewID'+userId)
+    app.getResume({objectId:userId}).then(resume=>{
+        app.previewResume = resume;
+    },()=>{
+        console.log('err')
+    })
 }
