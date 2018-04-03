@@ -36,7 +36,7 @@ let app = new Vue({
             email:'',
             password:''
         },
-        singUp:{
+        signUp:{
             email:'',
             password:''
         },
@@ -119,21 +119,20 @@ let app = new Vue({
                 alert('保存失败')
             });
         },
-        onSingUp(e){
+        onSignUp(e){
             // e.preventDefault(); //阻止表单默认的提交刷新页面事件  可以直接在@submit.prevent
             // 新建 AVUser 对象实例
             const user = new AV.User();
             // 设置用户名
-            user.setUsername(this.singUp.email);
+            user.setUsername(this.signUp.email);
             // 设置密码
-            user.setPassword(this.singUp.password);
+            user.setPassword(this.signUp.password);
             // 设置邮箱
-            user.setEmail(this.singUp.email);
+            user.setEmail(this.signUp.email);
             user.signUp().then((user)=>{
                 console.log(user);
                 alert('注册成功,请登录')
                 //帮用户登录
-                debugger
                 user = user.toJSON();
                 console.log(user)
                 this.currentUser.objectId = user.objectId;
