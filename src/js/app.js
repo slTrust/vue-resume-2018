@@ -46,7 +46,6 @@ let app = new Vue({
         //监听登录成功后的 objectId
         'currentUser.objectId':function(newValue,oldValue){
             if(newValue){
-                console.log('登录重新获取用户数据')
                 this.getResume(this.currentUser);
             }
         }
@@ -181,6 +180,9 @@ let app = new Vue({
             },()=>{
                 console.log('获取用户信息失败')
             })
+        },
+        print(){
+            window.print();
         }
     }
 })
