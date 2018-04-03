@@ -71,3 +71,5 @@ button {
 }
 .skills > ul > li{position: relative;}
 .skills > ul > li .remove{position:absolute;top:0;right:0;}
+
+.exitPreview{position: fixed;left:20px;top:20px;}

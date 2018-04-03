@@ -5,6 +5,7 @@ let app = new Vue({
         signUpVisible:false,
         shareVisible:false,
         editingName:false,
+        skinPickerVisible:false,
         currentUser:{
             objectId:'',
             email:''
@@ -40,7 +41,8 @@ let app = new Vue({
             password:''
         },
         shareLink:'不知道',
-        mode:'edit'  // preview
+        mode:'edit',  // preview
+        mainClass:'default'
     },
     watch:{
         //监听登录成功后的 objectId
@@ -183,6 +185,9 @@ let app = new Vue({
         },
         print(){
             window.print();
+        },
+        setTheme(name){
+            document.body.className = name;
         }
     }
 })
