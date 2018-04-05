@@ -32,14 +32,8 @@ let app = new Vue({
                 {name:'请填写项目名称',link:'http://...',keywords:'请填写关键词',description:'请详细描述'}
             ]
         },
-        login:{
-            email:'',
-            password:''
-        },
-        signUp:{
-            email:'',
-            password:''
-        },
+     
+       
         shareLink:'不知道',
         mode:'edit',  // preview
         mainClass:'default'
@@ -48,7 +42,7 @@ let app = new Vue({
         //监听登录成功后的 objectId
         'currentUser.objectId':function(newValue,oldValue){
             if(newValue){
-                this.getResume(this.currentUser);
+                this.getResume(this.currentUser).then((resume)=>this.resume=resume);
             }
         }
     },
@@ -58,6 +52,12 @@ let app = new Vue({
         }
     },
     methods:{
+        onLogin(user){
+            this.currentUser.objectId = user.objectId;
+            this.currentUser.email = user.email;
+            this.getResume(this.currentUser)
+            this.loginVisible = false;
+        },
         onEdit(key,value){
             //正则替换   skills[0].name[0].aa  ==> skills.0.name.0.aa
             let regex = /\[(\d+)\]/g;
@@ -119,48 +119,8 @@ let app = new Vue({
                 alert('保存失败')
             });
         },
-        onSignUp(e){
-            // e.preventDefault(); //阻止表单默认的提交刷新页面事件  可以直接在@submit.prevent
-            // 新建 AVUser 对象实例
-            const user = new AV.User();
-            // 设置用户名
-            user.setUsername(this.signUp.email);
-            // 设置密码
-            user.setPassword(this.signUp.password);
-            // 设置邮箱
-            user.setEmail(this.signUp.email);
-            user.signUp().then((user)=>{
-                console.log(user);
-                alert('注册成功,请登录')
-                //帮用户登录
-                user = user.toJSON();
-                console.log(user)
-                this.currentUser.objectId = user.objectId;
-                this.currentUser.email = user.email;
-                this.signUpVisible = false;
-            }, (error)=>{
-                alert(error.rawMessage)
-                for(var name in error){
-                    console.log(name)
-                }
-            });
-        },
-        onLogin(e){
-            AV.User.logIn(this.login.email, this.login.password)
-                .then((user)=>{
-                    user = user.toJSON();
-                    this.currentUser.objectId = user.objectId;
-                    this.currentUser.email = user.email;
-                    this.loginVisible = false;
-                }, ( (error)=>{
-                    if(error.code===211){
-                        alert('用户不存在')
-                    }else if(error.code===210){
-                        alert('用户名或密码错误')
-                    }
-                })
-            );
-        },
+        
+       
         hasLogin(){
             // 存在则已登录  不存在则没登录
             return !!this.currentUser.objectId
@@ -182,12 +142,18 @@ let app = new Vue({
                 console.log('获取用户信息失败')
             })
         },
+        onShare(){
+            
+            if(this.hasLogin()){
+                this.shareVisible = true;
+            }else{
+                alert('请先登录')
+            }
+        },
         print(){
             window.print();
         },
-        setTheme(name){
-            document.body.className = name;
-        }
+       
     }
 })
 
