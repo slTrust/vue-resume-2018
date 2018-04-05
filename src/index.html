@@ -17,7 +17,7 @@
 
 <body class="default">
     <div class="page" id="app">
-        <app-aside  v-show="mode==='edit'" :logout-visible="hasLogin()"></app-aside>
+        <app-aside  v-show="mode==='edit'" :logout-visible="hasLogin()" @save="onClickSave" @logout="onLogout"></app-aside>
         <main>
            <resume :mode="mode" :display-resume="displayResume"></resume>
         </main>

@@ -5,7 +5,7 @@ Vue.component('app-aside',{
         <div class="upper">
             <ul class="actions">
                 <li>
-                    <button class="button" @click="$emit('clickSave')">保存</button>
+                    <button class="button" @click="$emit('save')">保存</button>
                 </li>
                 <li>
                     <button class="button"  @click="$emit('share')">分享</button>
