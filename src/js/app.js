@@ -84,18 +84,8 @@ let app = new Vue({
             }
             console.log(result)
         },
-        addSkill(){
-            this.resume.skills.push({name:'请填写技能名称',description:'请填写技能描述'})
-        },
-        removeSkill(index){
-            this.resume.skills.splice(index,1)
-        },
-        addProject(){
-            this.resume.projects.push({name:'请填写项目名称',link:'http://...',keywords:'请填写关键词',description:'请详细描述'})
-        },
-        removeProject(index){
-            this.resume.projects.splice(index,1)
-        },
+       
+        
         onClickSave(){
             let currentUser = AV.User.current();
             console.log(currentUser)
